@@ -5,16 +5,12 @@ import HoverCounter from './components/HoverCounter';
 function App() {
   return (
     <div className="App">
-      <Counter
-        render={(count, incrementCount) => (
-          <ClickCounter count={count} incrementCount={incrementCount} />
-        )}
-      />
-      <Counter
-        render={(count, incrementCount) => (
-          <HoverCounter count={count} incrementCount={incrementCount} />
-        )}
-      />
+      <Counter>
+        {(count, incrementCount) => <ClickCounter count={count} incrementCount={incrementCount} />}
+      </Counter>
+      <Counter>
+        {(count, incrementCount) => <HoverCounter count={count} incrementCount={incrementCount} />}
+      </Counter>
     </div>
   );
 }
