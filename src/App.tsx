@@ -1,11 +1,6 @@
-import { useState } from "react";
-import Contact from "./pages/Contact";
-import Home from "./pages/Home";
-import Services from "./pages/Services";
+import { Link, Outlet } from "react-router-dom";
 
 function App() {
-	const [count, setCount] = useState(0);
-
 	return (
 		<>
 			<div className="flex items-center">
@@ -13,20 +8,19 @@ function App() {
 				<nav className="ms-auto me-4">
 					<ul className="list-none flex items-center gap-4 text-lg font-semibold text-teal-600">
 						<li>
-							<a href="#">Home</a>
+							<Link to="/">Home</Link>
 						</li>
 						<li>
-							<a href="#">Services</a>
+							<Link to={`/services/123`}>Services</Link>
 						</li>
 						<li>
-							<a href="#">Contact</a>
+							<Link to={`/contact`}>Contact</Link>
 						</li>
 					</ul>
 				</nav>
 			</div>
-			<Home />
-			<Services />
-			<Contact />
+
+			<Outlet />
 		</>
 	);
 }
