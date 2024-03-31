@@ -1,6 +1,9 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 
 function App() {
+	const logout = () => {
+		localStorage.setItem("auth", "false");
+	};
 	return (
 		<>
 			<div className="flex items-center">
@@ -11,10 +14,20 @@ function App() {
 							<Link to="/">Home</Link>
 						</li>
 						<li>
-							<Link to={`/services/123`}>Services</Link>
+							<NavLink to={`/services/123`} className={({ isActive }) => (isActive ? "text-green-400" : "")}>
+								Services
+							</NavLink>
 						</li>
 						<li>
 							<Link to={`/contact`}>Contact</Link>
+						</li>
+						<li>
+							<Link to={`/dashboard`}>Dashboard</Link>
+						</li>
+						<li>
+							<Link to="" onClick={logout}>
+								Logout
+							</Link>
 						</li>
 					</ul>
 				</nav>

@@ -7,7 +7,7 @@ export async function loader({ params }) {
 }
 
 function Services() {
-	const { params } = useLoaderData() as any;
+	const { params } = useLoaderData() as { params: string };
 	// can also see the params data using useParams
 	const newParams = useParams();
 	console.log(params);
