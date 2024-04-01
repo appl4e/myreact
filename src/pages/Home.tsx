@@ -33,7 +33,10 @@ const Home = () => {
 					<h2 className="font-bold text-3xl mb-4">Posts</h2>
 					<div className="flex ms-auto items-center gap-2">
 						<label>Page</label>
-						<select className="border border-slate-700 block rounded-sm" onChange={(e) => setUserId(e.target.value)}>
+						<select
+							className="border border-slate-700 block rounded-sm focus:border-blue-500 focus:outline-0"
+							onChange={(e) => setUserId(e.target.value)}
+						>
 							{selects}
 						</select>
 					</div>
