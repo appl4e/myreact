@@ -1,31 +1,15 @@
 import { useEffect, useState } from "react";
 import PageCover from "../../components/PageCover";
-import { getFullName } from "../../helper/miscellenious";
-
-interface IUserInfo {
-	id: string;
-	firstName: string;
-	lastName: string;
-	maidenName: string;
-	age: number;
-	gender: string;
-	email: string;
-	phone: string;
-	username: string;
-	password: string;
-	birthDate: string;
-	company: {
-		department: string;
-		name: string;
-		title: string;
-	};
-}
+import { IUserInfo } from "../../interfaces/user";
+import UserDetails from "./components/UserDetails";
+import UserRow from "./components/UserRow";
 
 const Users = () => {
 	const [users, setUsers] = useState<IUserInfo[]>([]);
 	const [filteredUsers, setFilteredUsers] = useState<IUserInfo[]>([]);
 	const [isUsersLoading, setUsersLoading] = useState<boolean>(false);
 	const [openText, setOpenText] = useState<string>("");
+	const [selectedUser, setSelectedUser] = useState<IUserInfo>();
 
 	useEffect(() => {
 		setUsersLoading(true);
@@ -45,53 +29,53 @@ const Users = () => {
 		setFilteredUsers(users.filter((user) => user.firstName.toLocaleLowerCase().includes(openText.toLocaleLowerCase())));
 	}
 
+	const onUserSelect = (user) => {};
+
 	return (
 		<>
 			<PageCover title="User List" />
+			<div className="flex">
+				<div className="w-6/12 p-4 flex flex-col">
+					<label htmlFor="" className="mb-3 font-semibold">
+						Search User
+					</label>
+					<input
+						type="text"
+						className="border border-gray-600 py-2 px-3 focus:border-blue-400 focus:outline-0 text-md"
+						value={openText}
+						onChange={(ev) => filterUser(ev.target.value)}
+					/>
 
-			<div className="w-8/12 p-4 flex flex-col">
-				<label htmlFor="" className="mb-3 font-semibold">
-					Search User
-				</label>
-				<input
-					type="text"
-					className="border border-gray-600 py-2 px-3 focus:border-blue-400 focus:outline-0 text-md"
-					value={openText}
-					onChange={(ev) => filterUser(ev.target.value)}
-				/>
-
-				<div className="w-100 h-3/4 overflow-y-auto">
-					<table className="w-100">
-						<thead>
-							<tr>
-								<th className="min-w-36 text-left">Name</th>
-								<th className="min-w-44 text-left">Designation</th>
-							</tr>
-						</thead>
-						<tbody>
-							{isUsersLoading ? (
-								<tr className="bg-gray-100">
-									<td colSpan={2} className="h-16">
-										<h4 className="text-gray-400 text-center">User data loading ...</h4>
-									</td>
-								</tr>
-							) : filteredUsers.length ? (
-								filteredUsers.map((user) => (
-									<tr key={user.id}>
-										<td>{getFullName(user.firstName, user.lastName)}</td>
-										<td>{user?.company?.title}</td>
-									</tr>
-								))
-							) : (
+					<div className="w-100 h-3/4 overflow-y-auto">
+						<table className="w-100">
+							<thead>
 								<tr>
-									<td colSpan={2}>
-										<h4 className="text-gray-400">No users found</h4>
-									</td>
+									<th className="min-w-36 text-left">Name</th>
+									<th className="min-w-44 text-left">Designation</th>
+									<th className="min-w-44 text-center">Action</th>
 								</tr>
-							)}
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								{isUsersLoading ? (
+									<tr className="bg-gray-100">
+										<td colSpan={2} className="h-16">
+											<h4 className="text-gray-400 text-center">User data loading ...</h4>
+										</td>
+									</tr>
+								) : filteredUsers.length ? (
+									filteredUsers.map((user) => <UserRow user={user} key={user.id} onSelect={(e) => setSelectedUser(user)} />)
+								) : (
+									<tr>
+										<td colSpan={2}>
+											<h4 className="text-gray-400">No users found</h4>
+										</td>
+									</tr>
+								)}
+							</tbody>
+						</table>
+					</div>
 				</div>
+				<div className="w-6/12 p-4">{selectedUser && <UserDetails user={selectedUser} />}</div>
 			</div>
 		</>
 	);
