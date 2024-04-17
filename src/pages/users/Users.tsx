@@ -23,6 +23,7 @@ interface IUserInfo {
 
 const Users = () => {
 	const [users, setUsers] = useState<IUserInfo[]>([]);
+	const [filteredUsers, setFilteredUsers] = useState<IUserInfo[]>([]);
 	const [isUsersLoading, setUsersLoading] = useState<boolean>(false);
 	const [openText, setOpenText] = useState<string>("");
 
@@ -33,10 +34,17 @@ const Users = () => {
 			.then((data) => {
 				if (data?.users?.length) {
 					setUsers(data?.users);
+					setFilteredUsers(data?.users);
 					setUsersLoading(false);
 				}
 			});
 	}, []);
+
+	function filterUser(openText) {
+		setOpenText(openText);
+		setFilteredUsers(users.filter((user) => user.firstName.toLocaleLowerCase().includes(openText.toLocaleLowerCase())));
+	}
+
 	return (
 		<>
 			<PageCover title="User List" />
@@ -49,7 +57,7 @@ const Users = () => {
 					type="text"
 					className="border border-gray-600 py-2 px-3 focus:border-blue-400 focus:outline-0 text-md"
 					value={openText}
-					onChange={(ev) => setOpenText(ev.target.value)}
+					onChange={(ev) => filterUser(ev.target.value)}
 				/>
 
 				<div className="w-100 h-3/4 overflow-y-auto">
@@ -67,9 +75,9 @@ const Users = () => {
 										<h4 className="text-gray-400 text-center">User data loading ...</h4>
 									</td>
 								</tr>
-							) : users.length ? (
-								users.map((user) => (
-									<tr>
+							) : filteredUsers.length ? (
+								filteredUsers.map((user) => (
+									<tr key={user.id}>
 										<td>{getFullName(user.firstName, user.lastName)}</td>
 										<td>{user?.company?.title}</td>
 									</tr>
