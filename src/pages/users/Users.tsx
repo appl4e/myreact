@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import PageCover from "../../components/PageCover";
 import { IUserInfo } from "../../interfaces/user";
 import UserDetails from "./components/UserDetails";
+import UserFilter from "./components/UserFilter";
 import UserRow from "./components/UserRow";
 
 const Users = () => {
 	const [users, setUsers] = useState<IUserInfo[]>([]);
 	const [filteredUsers, setFilteredUsers] = useState<IUserInfo[]>([]);
 	const [isUsersLoading, setUsersLoading] = useState<boolean>(false);
-	const [openText, setOpenText] = useState<string>("");
 	const [selectedUser, setSelectedUser] = useState<IUserInfo>();
 
 	useEffect(() => {
@@ -25,7 +25,6 @@ const Users = () => {
 	}, []);
 
 	function filterUser(openText) {
-		setOpenText(openText);
 		setFilteredUsers(users.filter((user) => user.firstName.toLocaleLowerCase().includes(openText.toLocaleLowerCase())));
 	}
 
@@ -36,7 +35,7 @@ const Users = () => {
 			<PageCover title="User List" />
 			<div className="flex">
 				<div className="w-6/12 p-4 flex flex-col">
-					<label htmlFor="" className="mb-3 font-semibold">
+					{/* <label htmlFor="" className="mb-3 font-semibold">
 						Search User
 					</label>
 					<input
@@ -44,7 +43,8 @@ const Users = () => {
 						className="border border-gray-600 py-2 px-3 focus:border-blue-400 focus:outline-0 text-md"
 						value={openText}
 						onChange={(ev) => filterUser(ev.target.value)}
-					/>
+					/> */}
+					<UserFilter onFilter={(ev) => filterUser(ev.target.value)} />
 
 					<div className="w-100 h-3/4 overflow-y-auto">
 						<table className="w-100">
