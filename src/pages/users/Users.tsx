@@ -3,7 +3,7 @@ import PageCover from "../../components/PageCover";
 import { IUserInfo } from "../../interfaces/user";
 import UserDetails from "./components/UserDetails";
 import UserFilter from "./components/UserFilter";
-import UserRow from "./components/UserRow";
+import UserTable from "./components/UserTable";
 
 const Users = () => {
 	const [users, setUsers] = useState<IUserInfo[]>([]);
@@ -28,8 +28,6 @@ const Users = () => {
 		setFilteredUsers(users.filter((user) => user.firstName.toLocaleLowerCase().includes(openText.toLocaleLowerCase())));
 	}
 
-	const onUserSelect = (user) => {};
-
 	return (
 		<>
 			<PageCover title="User List" />
@@ -47,32 +45,7 @@ const Users = () => {
 					<UserFilter onFilter={(ev) => filterUser(ev.target.value)} />
 
 					<div className="w-100 h-3/4 overflow-y-auto">
-						<table className="w-100">
-							<thead>
-								<tr>
-									<th className="min-w-36 text-left">Name</th>
-									<th className="min-w-44 text-left">Designation</th>
-									<th className="min-w-44 text-center">Action</th>
-								</tr>
-							</thead>
-							<tbody>
-								{isUsersLoading ? (
-									<tr className="bg-gray-100">
-										<td colSpan={2} className="h-16">
-											<h4 className="text-gray-400 text-center">User data loading ...</h4>
-										</td>
-									</tr>
-								) : filteredUsers.length ? (
-									filteredUsers.map((user) => <UserRow user={user} key={user.id} onSelect={(e) => setSelectedUser(user)} />)
-								) : (
-									<tr>
-										<td colSpan={2}>
-											<h4 className="text-gray-400">No users found</h4>
-										</td>
-									</tr>
-								)}
-							</tbody>
-						</table>
+						<UserTable filteredUsers={filteredUsers} isUsersLoading={isUsersLoading} setSelectedUser={setSelectedUser} />
 					</div>
 				</div>
 				<div className="w-6/12 p-4">{selectedUser && <UserDetails user={selectedUser} />}</div>
