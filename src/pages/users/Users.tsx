@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import PageCover from "../../components/PageCover";
 import { IUserInfo } from "../../interfaces/user";
+import UserContext from "./UserContext";
 import UserDetails from "./components/UserDetails";
 import UserFilter from "./components/UserFilter";
 import UserTable from "./components/UserTable";
@@ -29,7 +30,7 @@ const Users = () => {
 	}
 
 	return (
-		<>
+		<UserContext.Provider value={{ users, setUsers, filteredUsers, setFilteredUsers, isUsersLoading, selectedUser, setSelectedUser }}>
 			<PageCover title="User List" />
 			<div className="flex">
 				<div className="w-6/12 p-4 flex flex-col">
@@ -42,15 +43,15 @@ const Users = () => {
 						value={openText}
 						onChange={(ev) => filterUser(ev.target.value)}
 					/> */}
-					<UserFilter onFilter={(ev) => filterUser(ev.target.value)} />
+					<UserFilter />
 
 					<div className="w-100 h-3/4 overflow-y-auto">
-						<UserTable filteredUsers={filteredUsers} isUsersLoading={isUsersLoading} setSelectedUser={setSelectedUser} />
+						<UserTable />
 					</div>
 				</div>
-				<div className="w-6/12 p-4">{selectedUser && <UserDetails user={selectedUser} />}</div>
+				<div className="w-6/12 p-4">{selectedUser && <UserDetails />}</div>
 			</div>
-		</>
+		</UserContext.Provider>
 	);
 };
 

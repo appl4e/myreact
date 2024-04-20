@@ -1,27 +1,28 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getFullName } from "../../../helper/miscellenious";
-import { IUserInfo } from "../../../interfaces/user";
+import UserContext from "../UserContext";
 
-const UserDetails = ({ user }: { user: IUserInfo }) => {
+const UserDetails = () => {
+	const { selectedUser } = useContext(UserContext);
 	const [userComp, setUserComp] = useState<string[]>([]);
 	useEffect(() => {
-		const companyKeys = Object.keys(user.company);
+		const companyKeys = Object.keys(selectedUser.company);
 		// console.log(companyKeys);
 
 		setUserComp(companyKeys);
 	}, []);
 	return (
 		<>
-			<h1 className="text-lg font-bold mt-6">{getFullName(user.firstName, user.lastName)}</h1>
+			<h1 className="text-lg font-bold mt-6">{getFullName(selectedUser.firstName, selectedUser.lastName)}</h1>
 			<h4 className="text-md font-semibold text-green-700">Company Info</h4>
 			<table>
 				<tbody>
 					{userComp.map(
 						(key) =>
-							typeof user.company[key] === "string" && (
+							typeof selectedUser.company[key] === "string" && (
 								<tr key={key}>
 									<td className="pe-3">{key}</td>
-									<td>{user?.company?.[key]}</td>
+									<td>{selectedUser?.company?.[key]}</td>
 								</tr>
 							)
 					)}

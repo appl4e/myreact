@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import UserContext from "../UserContext";
 
-const UserFilter = ({ onFilter }: { onFilter: React.ChangeEventHandler<HTMLInputElement> }) => {
+const UserFilter = () => {
 	const [openText, setOpenText] = useState<string>("");
+	const { users, setFilteredUsers } = useContext<any>(UserContext);
 	const onSearch = (ev) => {
 		setOpenText(ev.target.value);
-		onFilter(ev);
+		setFilteredUsers(users.filter((user) => user.firstName.toLocaleLowerCase().includes(ev.target.value.toLocaleLowerCase())));
 	};
 	return (
 		<>

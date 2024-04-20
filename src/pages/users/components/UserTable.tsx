@@ -1,6 +1,9 @@
+import { useContext } from "react";
+import UserContext from "../UserContext";
 import UserRow from "./UserRow";
 
-const UserTable = ({ isUsersLoading, filteredUsers, setSelectedUser }) => {
+const UserTable = () => {
+	const { isUsersLoading, filteredUsers } = useContext<any>(UserContext);
 	return (
 		<table className="w-100">
 			<thead>
@@ -18,7 +21,7 @@ const UserTable = ({ isUsersLoading, filteredUsers, setSelectedUser }) => {
 						</td>
 					</tr>
 				) : filteredUsers.length ? (
-					filteredUsers.map((user) => <UserRow user={user} key={user.id} onSelect={(e) => setSelectedUser(user)} />)
+					filteredUsers.map((user) => <UserRow user={user} key={user.id} />)
 				) : (
 					<tr>
 						<td colSpan={2}>
