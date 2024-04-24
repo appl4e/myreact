@@ -3,7 +3,9 @@ import { getFullName } from "../../../helper/miscellenious";
 import UserContext from "../UserContext";
 
 const UserDetails = () => {
-	const { selectedUser } = useContext(UserContext);
+	const {
+		state: { selectedUser },
+	} = useContext(UserContext);
 	const [userComp, setUserComp] = useState<string[]>([]);
 	useEffect(() => {
 		const companyKeys = Object.keys(selectedUser.company);
