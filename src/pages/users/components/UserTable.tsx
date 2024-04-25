@@ -3,7 +3,9 @@ import UserContext from "../UserContext";
 import UserRow from "./UserRow";
 
 const UserTable = () => {
-	const { isUsersLoading, filteredUsers } = useContext<any>(UserContext);
+	const {
+		state: { isUsersLoading, filteredUsers },
+	} = useContext<any>(UserContext);
 	return (
 		<table className="w-100">
 			<thead>

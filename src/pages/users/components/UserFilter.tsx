@@ -3,10 +3,16 @@ import UserContext from "../UserContext";
 
 const UserFilter = () => {
 	const [openText, setOpenText] = useState<string>("");
-	const { users, setFilteredUsers } = useContext<any>(UserContext);
+	const {
+		state: { users },
+		dispatch,
+	} = useContext<any>(UserContext);
 	const onSearch = (ev) => {
 		setOpenText(ev.target.value);
-		setFilteredUsers(users.filter((user) => user.firstName.toLocaleLowerCase().includes(ev.target.value.toLocaleLowerCase())));
+		dispatch({
+			type: "SET_FILTERED_USERS",
+			payload: users.filter((user) => user.firstName.toLocaleLowerCase().includes(ev.target.value.toLocaleLowerCase())),
+		});
 	};
 	return (
 		<>

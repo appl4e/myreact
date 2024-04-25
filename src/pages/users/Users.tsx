@@ -1,36 +1,66 @@
-import { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PageCover from "../../components/PageCover";
-import { IUserInfo } from "../../interfaces/user";
 import UserContext from "./UserContext";
 import UserDetails from "./components/UserDetails";
 import UserFilter from "./components/UserFilter";
 import UserTable from "./components/UserTable";
 
+const userReducer = (state, action) => {
+	switch (action.type) {
+		case "SET_USERS":
+			return {
+				...state,
+				users: action.payload,
+			};
+		case "SET_FILTERED_USERS":
+			return {
+				...state,
+				filteredUsers: action.payload,
+			};
+		case "SET_USERS_LOADING":
+			return {
+				...state,
+				isUsersLoading: action.payload,
+			};
+		case "SET_SELECTED_USER":
+			return {
+				...state,
+				selectedUser: action.payload,
+			};
+	}
+};
+
 const Users = () => {
-	const [users, setUsers] = useState<IUserInfo[]>([]);
-	const [filteredUsers, setFilteredUsers] = useState<IUserInfo[]>([]);
-	const [isUsersLoading, setUsersLoading] = useState<boolean>(false);
-	const [selectedUser, setSelectedUser] = useState<IUserInfo>();
+	const [state, dispatch] = React.useReducer(userReducer, {
+		users: [],
+		filteredUsers: [],
+		isUsersLoading: false,
+		selectedUser: null,
+	});
 
 	useEffect(() => {
-		setUsersLoading(true);
+		// setUsersLoading(true);
+		dispatch({ type: "SET_USERS_LOADING", payload: true });
 		fetch("https://dummyjson.com/users?" + new URLSearchParams({ limit: "10", skip: "0" }))
 			.then((res) => res.json())
 			.then((data) => {
 				if (data?.users?.length) {
-					setUsers(data?.users);
-					setFilteredUsers(data?.users);
-					setUsersLoading(false);
+					// setUsers(data?.users);
+					dispatch({ type: "SET_USERS", payload: data?.users });
+					// setFilteredUsers(data?.users);
+					dispatch({ type: "SET_FILTERED_USERS", payload: data?.users });
+					// setUsersLoading(false);
+					dispatch({ type: "SET_USERS_LOADING", payload: false });
 				}
 			});
 	}, []);
 
-	function filterUser(openText) {
-		setFilteredUsers(users.filter((user) => user.firstName.toLocaleLowerCase().includes(openText.toLocaleLowerCase())));
-	}
+	// function filterUser(openText) {
+	// 	setFilteredUsers(users.filter((user) => user.firstName.toLocaleLowerCase().includes(openText.toLocaleLowerCase())));
+	// }
 
 	return (
-		<UserContext.Provider value={{ users, setUsers, filteredUsers, setFilteredUsers, isUsersLoading, selectedUser, setSelectedUser }}>
+		<UserContext.Provider value={{ state, dispatch }}>
 			<PageCover title="User List" />
 			<div className="flex">
 				<div className="w-6/12 p-4 flex flex-col">
@@ -49,7 +79,7 @@ const Users = () => {
 						<UserTable />
 					</div>
 				</div>
-				<div className="w-6/12 p-4">{selectedUser && <UserDetails />}</div>
+				<div className="w-6/12 p-4">{state.selectedUser && <UserDetails />}</div>
 			</div>
 		</UserContext.Provider>
 	);
